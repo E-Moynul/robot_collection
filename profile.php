@@ -34,6 +34,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // Change password
+    if (isset($_POST['change_password'])) {
+        $current = $_POST['current_password'] ?? '';
+        $new     = $_POST['new_password'] ?? '';
+        $confirm = $_POST['confirm_password'] ?? '';
+
+        $stmt = $pdo->prepare('SELECT password FROM users WHERE id = ?');
+        $stmt->execute([$userId]);
+        $hash = $stmt->fetchColumn();
+
+        if (!$hash || !password_verify($current, $hash)) {
+            $error = 'Current password is incorrect.';
+        } elseif (strlen($new) < 6) {
+            $error = 'New password must be at least 6 characters.';
+        } elseif ($new !== $confirm) {
+            $error = 'New passwords do not match.';
+        } else {
+            $pdo->prepare('UPDATE users SET password = ? WHERE id = ?')
+                ->execute([password_hash($new, PASSWORD_DEFAULT), $userId]);
+            $message = 'Password changed successfully.';
+        }
+    }
+
     // Remove a bookmark
     if (isset($_POST['remove_bookmark'])) {
         $robotId = (int)($_POST['robot_id'] ?? 0);
@@ -81,6 +104,25 @@ include 'includes/header.php';
             <input type="text" id="name" name="name" value="<?= e($user['name']) ?>" required>
         </div>
         <button type="submit" name="update_name" class="btn">Update Name</button>
+    </form>
+
+    <hr style="margin:24px 0; border:none; border-top:1px solid var(--border);">
+
+    <h3 style="margin-bottom:12px;">Change Password</h3>
+    <form method="post" action="profile.php">
+        <div class="form-group">
+            <label for="current_password">Current Password</label>
+            <input type="password" id="current_password" name="current_password" required>
+        </div>
+        <div class="form-group">
+            <label for="new_password">New Password</label>
+            <input type="password" id="new_password" name="new_password" required>
+        </div>
+        <div class="form-group">
+            <label for="confirm_password">Confirm New Password</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+        </div>
+        <button type="submit" name="change_password" class="btn">Change Password</button>
     </form>
 </div>
 
