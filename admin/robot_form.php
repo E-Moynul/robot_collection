@@ -92,6 +92,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // ----- 3D model upload (optional; overrides the model path/link field) -----
+    if (empty($errors)
+        && isset($_FILES['model_file'])
+        && $_FILES['model_file']['error'] !== UPLOAD_ERR_NO_FILE) {
+
+        $file = $_FILES['model_file'];
+        $ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            $errors[] = '3D model upload failed. The file may be too large for the server.';
+        } elseif ($file['size'] > 10 * 1024 * 1024) {
+            $errors[] = '3D model must be smaller than 10 MB.';
+        } elseif ($ext !== 'glb') {
+            $errors[] = '3D model must be a .glb file.';
+        } else {
+            // A real .glb file always starts with the 4 bytes "glTF"
+            $fh    = fopen($file['tmp_name'], 'rb');
+            $magic = fread($fh, 4);
+            fclose($fh);
+
+            if ($magic !== 'glTF') {
+                $errors[] = 'The uploaded file is not a valid .glb model.';
+            } else {
+                $dir = __DIR__ . '/../assets/models/';
+                if (!is_dir($dir)) {
+                    mkdir($dir, 0755, true);
+                }
+                $newName = uniqid('model_') . '.glb';
+
+                if (move_uploaded_file($file['tmp_name'], $dir . $newName)) {
+                    $data['model_url'] = 'assets/models/' . $newName;
+                } else {
+                    $errors[] = 'Could not save the uploaded 3D model.';
+                }
+            }
+        }
+    }
+
     // ----- Save -----
     if (empty($errors)) {
         $year = $data['year_introduced'] === '' ? null : (int)$data['year_introduced'];
@@ -215,7 +253,12 @@ include '../includes/header.php';
         </div>
 
         <div class="form-group">
-            <label for="model_url">3D Model Path / Link (.glb)</label>
+            <label for="model_file">Upload 3D Model (.glb, max 10 MB)</label>
+            <input type="file" id="model_file" name="model_file" accept=".glb">
+        </div>
+
+        <div class="form-group">
+            <label for="model_url">Or 3D Model Path / Link (.glb)</label>
             <input type="text" id="model_url" name="model_url" value="<?= e($data['model_url']) ?>"
                    placeholder="assets/models/atlas.glb">
             <small>Leave empty if no 3D model is available. The site will show "3D model unavailable".</small>
