@@ -37,7 +37,7 @@ function require_admin(): void
 }
 
 // Safely print user-provided text in HTML (prevents XSS)
-// Usage: <?= e($robot['name']) ?>
+// Usage: echo e($robot['name']);
 function e($text): string
 {
     return htmlspecialchars((string)($text ?? ''), ENT_QUOTES, 'UTF-8');
