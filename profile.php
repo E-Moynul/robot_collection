@@ -8,12 +8,12 @@ $userId  = (int)$_SESSION['user_id'];
 $message = '';
 $error   = '';
 
-// Load the current user
+
 $stmt = $pdo->prepare('SELECT id, name, email, role, created_at FROM users WHERE id = ?');
 $stmt->execute([$userId]);
 $user = $stmt->fetch();
 
-// User no longer exists in the database -> log out
+
 if (!$user) {
     header('Location: logout.php');
     exit;
@@ -21,7 +21,7 @@ if (!$user) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Update name
+
     if (isset($_POST['update_name'])) {
         $newName = trim($_POST['name'] ?? '');
         if ($newName === '') {
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Change password
+
     if (isset($_POST['change_password'])) {
         $current = $_POST['current_password'] ?? '';
         $new     = $_POST['new_password'] ?? '';
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Remove a bookmark
+
     if (isset($_POST['remove_bookmark'])) {
         $robotId = (int)($_POST['robot_id'] ?? 0);
         $pdo->prepare('DELETE FROM bookmarks WHERE user_id = ? AND robot_id = ?')->execute([$userId, $robotId]);
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Bookmarked robots
+
 $stmt = $pdo->prepare(
     'SELECT r.id, r.name, r.manufacturer, r.image, c.name AS category_name
      FROM bookmarks b
