@@ -2,7 +2,7 @@
 require_once 'includes/db.php';
 require_once 'includes/auth.php';
 
-// Already logged in? No need to register
+
 if (is_logged_in()) {
     header('Location: index.php');
     exit;
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $confirm  = $_POST['confirm_password'] ?? '';
 
-    // Validation
+
     if ($name === '') {
         $errors[] = 'Name is required.';
     }
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Passwords do not match.';
     }
 
-    // Email must be unique
+
     if (empty($errors)) {
         $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ?');
         $stmt->execute([$email]);
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Save the new user (role is always "user"; admin is set in the database)
+
     if (empty($errors)) {
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $stmt = $pdo->prepare('INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, "user")');
