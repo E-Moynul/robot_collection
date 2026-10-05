@@ -1,11 +1,10 @@
--- Robot Collection Web App
--- Database: robot_collection
+
 
 CREATE DATABASE IF NOT EXISTS robot_collection
   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE robot_collection;
 
--- ---------- TABLES ----------
+
 
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -32,8 +31,8 @@ CREATE TABLE robots (
   description TEXT,
   specs TEXT,
   image VARCHAR(255),
-  video_url VARCHAR(255),   -- YouTube embed link
-  model_url VARCHAR(255),   -- .glb path/URL; NULL = "3D model unavailable"
+  video_url VARCHAR(255),   
+  model_url VARCHAR(255),   
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (category_id) REFERENCES categories(id)
     ON DELETE RESTRICT ON UPDATE CASCADE
@@ -49,9 +48,7 @@ CREATE TABLE bookmarks (
   FOREIGN KEY (robot_id) REFERENCES robots(id) ON DELETE CASCADE
 );
 
--- ---------- SAMPLE DATA ----------
 
--- Admin login: admin@robots.com / admin123  (change after first login)
 INSERT INTO users (name, email, password, role) VALUES
 ('Admin', 'admin@robots.com', '$2y$10$z6yIsQmhU7ZmyrWh9.O18el7fNVGju/uLGClhyi2/yZjPzq2t2axi', 'admin');
 
