@@ -1,11 +1,11 @@
 <?php
-$base = '../';   // this page is inside admin/ folder
+$base = '../';
 
 require_once '../includes/db.php';
 require_once '../includes/auth.php';
 require_admin();
 
-$id     = (int)($_GET['id'] ?? 0);   // 0 = add new robot, >0 = edit
+$id     = (int)($_GET['id'] ?? 0);
 $isEdit = $id > 0;
 $errors = [];
 
@@ -13,7 +13,7 @@ $fields = ['category_id', 'name', 'manufacturer', 'country', 'year_introduced',
            'description', 'specs', 'image', 'video_url', 'model_url'];
 $data = array_fill_keys($fields, '');
 
-// Edit mode: load the existing robot
+
 if ($isEdit) {
     $stmt = $pdo->prepare('SELECT * FROM robots WHERE id = ?');
     $stmt->execute([$id]);
@@ -26,7 +26,7 @@ if ($isEdit) {
     $data = array_merge($data, array_intersect_key($robot, $data));
 }
 
-// Categories for the dropdown
+
 $categories = $pdo->query('SELECT id, name FROM categories ORDER BY name')->fetchAll();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data[$f] = trim($_POST[$f] ?? '');
     }
 
-    // ----- Validation -----
+
     if ($data['name'] === '') {
         $errors[] = 'Robot name is required.';
     }
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Video link must be a valid YouTube link.';
     }
 
-    // ----- Image upload (optional; overrides the image path/link field) -----
+
     if (empty($errors)
         && isset($_FILES['image_file'])
         && $_FILES['image_file']['error'] !== UPLOAD_ERR_NO_FILE) {
@@ -92,7 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // ----- 3D model upload (optional; overrides the model path/link field) -----
     if (empty($errors)
         && isset($_FILES['model_file'])
         && $_FILES['model_file']['error'] !== UPLOAD_ERR_NO_FILE) {
@@ -107,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($ext !== 'glb') {
             $errors[] = '3D model must be a .glb file.';
         } else {
-            // A real .glb file always starts with the 4 bytes "glTF"
+
             $fh    = fopen($file['tmp_name'], 'rb');
             $magic = fread($fh, 4);
             fclose($fh);
@@ -130,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // ----- Save -----
+
     if (empty($errors)) {
         $year = $data['year_introduced'] === '' ? null : (int)$data['year_introduced'];
 
