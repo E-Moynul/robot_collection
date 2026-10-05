@@ -1,11 +1,11 @@
 <?php
-$base = '../';   // this page is inside admin/ folder
+$base = '../';
 
 require_once '../includes/db.php';
 require_once '../includes/auth.php';
 require_admin();
 
-// Totals for the dashboard
+
 $stats = $pdo->query(
     'SELECT
         (SELECT COUNT(*) FROM robots)     AS robots,
@@ -14,7 +14,7 @@ $stats = $pdo->query(
         (SELECT COUNT(*) FROM bookmarks)  AS bookmarks'
 )->fetch();
 
-// Latest 5 registered users
+
 $latestUsers = $pdo->query(
     'SELECT name, email, role, created_at FROM users ORDER BY created_at DESC, id DESC LIMIT 5'
 )->fetchAll();
