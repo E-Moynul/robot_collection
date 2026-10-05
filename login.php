@@ -2,7 +2,7 @@
 require_once 'includes/db.php';
 require_once 'includes/auth.php';
 
-// Already logged in? Send to the right place
+
 if (is_logged_in()) {
     header('Location: ' . (is_admin() ? 'admin/index.php' : 'index.php'));
     exit;
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $stmt->fetch();
 
     if ($user && password_verify($password, $user['password'])) {
-        session_regenerate_id(true);   // security: new session id after login
+        session_regenerate_id(true);  
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['name']    = $user['name'];
         $_SESSION['role']    = $user['role'];
