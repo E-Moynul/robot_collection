@@ -1,5 +1,5 @@
 <?php
-$base = '../';   // this page is inside admin/ folder
+$base = '../';
 
 require_once '../includes/db.php';
 require_once '../includes/auth.php';
@@ -11,12 +11,12 @@ $errors    = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $targetId = (int)($_POST['user_id'] ?? 0);
 
-    // An admin cannot change or delete their own account here
+
     if ($targetId === $currentId) {
         $errors[] = 'You cannot change or delete your own account from this page.';
     } else {
 
-        // ----- Change role -----
+
         if (isset($_POST['change_role'])) {
             $newRole = $_POST['role'] ?? '';
             if (!in_array($newRole, ['admin', 'user'], true)) {
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // ----- Delete user (their bookmarks are removed automatically) -----
+
         if (isset($_POST['delete_user'])) {
             $pdo->prepare('DELETE FROM users WHERE id = ?')->execute([$targetId]);
             header('Location: manage_users.php?msg=deleted');
@@ -43,7 +43,7 @@ $messages = [
 ];
 $msg = $messages[$_GET['msg'] ?? ''] ?? '';
 
-// All users with their bookmark counts
+
 $users = $pdo->query(
     'SELECT u.id, u.name, u.email, u.role, u.created_at, COUNT(b.id) AS bookmark_count
      FROM users u
