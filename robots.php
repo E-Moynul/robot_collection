@@ -2,14 +2,14 @@
 require_once 'includes/db.php';
 require_once 'includes/auth.php';
 
-// Filters from the URL (?q=...&category=...)
+
 $search   = trim($_GET['q'] ?? '');
 $category = (int)($_GET['category'] ?? 0);
 
-// Categories for the dropdown
+
 $categories = $pdo->query('SELECT id, name FROM categories ORDER BY name')->fetchAll();
 
-// Build the query step by step (always with prepared statement parameters)
+
 $sql = 'SELECT r.id, r.name, r.manufacturer, r.country, r.image, c.name AS category_name
         FROM robots r
         JOIN categories c ON c.id = r.category_id
