@@ -1,11 +1,11 @@
 <?php
-$base = '../';   // this page is inside admin/ folder
+$base = '../';
 
 require_once '../includes/db.php';
 require_once '../includes/auth.php';
 require_admin();
 
-// Delete a robot (bookmarks of this robot are removed automatically by the database)
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $deleteId = (int)$_POST['delete_id'];
     $pdo->prepare('DELETE FROM robots WHERE id = ?')->execute([$deleteId]);
@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     exit;
 }
 
-// Success messages coming from this page or robot_form.php
+
 $messages = [
     'deleted' => 'Robot deleted successfully.',
     'added'   => 'Robot added successfully.',
@@ -21,7 +21,7 @@ $messages = [
 ];
 $msg = $messages[$_GET['msg'] ?? ''] ?? '';
 
-// All robots with category name
+
 $robots = $pdo->query(
     'SELECT r.id, r.name, r.manufacturer, r.image, r.video_url, r.model_url, c.name AS category_name
      FROM robots r
@@ -29,7 +29,7 @@ $robots = $pdo->query(
      ORDER BY r.id DESC'
 )->fetchAll();
 
-// Image path: full links stay as they are, local paths need "../" because we are in admin/
+
 function admin_img(?string $path): string
 {
     if (!$path) {
