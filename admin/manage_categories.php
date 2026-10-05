@@ -1,5 +1,5 @@
 <?php
-$base = '../';   // this page is inside admin/ folder
+$base = '../';
 
 require_once '../includes/db.php';
 require_once '../includes/auth.php';
@@ -7,10 +7,10 @@ require_admin();
 
 $errors = [];
 
-// Form values (used for both "add" and "edit")
+
 $form = ['id' => 0, 'name' => '', 'description' => ''];
 
-// Edit mode: ?edit=ID loads that category into the form
+
 $editId = (int)($_GET['edit'] ?? 0);
 if ($editId > 0) {
     $stmt = $pdo->prepare('SELECT id, name, description FROM categories WHERE id = ?');
@@ -23,7 +23,7 @@ if ($editId > 0) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // ----- Add or update -----
+
     if (isset($_POST['save_category'])) {
         $form['id']          = (int)($_POST['id'] ?? 0);
         $form['name']        = trim($_POST['name'] ?? '');
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($form['name'] === '') {
             $errors[] = 'Category name is required.';
         } else {
-            // Name must be unique (ignore the category being edited)
+
             $stmt = $pdo->prepare('SELECT id FROM categories WHERE name = ? AND id <> ?');
             $stmt->execute([$form['name'], $form['id']]);
             if ($stmt->fetch()) {
@@ -54,11 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // ----- Delete -----
+
     if (isset($_POST['delete_id'])) {
         $deleteId = (int)$_POST['delete_id'];
 
-        // A category that still has robots cannot be deleted
+
         $stmt = $pdo->prepare('SELECT COUNT(*) FROM robots WHERE category_id = ?');
         $stmt->execute([$deleteId]);
         $count = (int)$stmt->fetchColumn();
@@ -80,7 +80,7 @@ $messages = [
 ];
 $msg = $messages[$_GET['msg'] ?? ''] ?? '';
 
-// All categories with robot counts
+
 $categories = $pdo->query(
     'SELECT c.id, c.name, c.description, COUNT(r.id) AS robot_count
      FROM categories c
