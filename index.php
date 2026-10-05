@@ -2,7 +2,7 @@
 require_once 'includes/db.php';
 require_once 'includes/auth.php';
 
-// All categories with number of robots in each
+
 $categories = $pdo->query(
     'SELECT c.id, c.name, c.description, COUNT(r.id) AS robot_count
      FROM categories c
@@ -11,7 +11,7 @@ $categories = $pdo->query(
      ORDER BY c.name'
 )->fetchAll();
 
-// Latest 6 robots
+
 $latest = $pdo->query(
     'SELECT r.id, r.name, r.manufacturer, r.image, c.name AS category_name
      FROM robots r
@@ -20,7 +20,7 @@ $latest = $pdo->query(
      LIMIT 6'
 )->fetchAll();
 
-// Simple grey placeholder if a robot image is missing
+
 $placeholder = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='100%' height='100%' fill='%23e5e7eb'/><text x='50%' y='50%' fill='%236b7280' font-size='22' text-anchor='middle' dy='.3em'>No Image</text></svg>";
 
 $pageTitle = 'Home';
