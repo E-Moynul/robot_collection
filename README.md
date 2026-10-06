@@ -254,7 +254,7 @@ robot_collection/
 
 | Email | Password |
 |-------|----------|
-| `admin@robots.com` | `admin123` |
+| `xxxx` | `xxxx` |
 
 > ⚠️ Change this password immediately after the first login (Profile → Change Password).
 
