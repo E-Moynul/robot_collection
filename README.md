@@ -1,6 +1,6 @@
 # 🤖 Robot Collection
 
-A full-stack, database-driven web application for exploring robots by category, with detailed specifications, YouTube demonstrations, and interactive 3D model viewing. Includes role-based access control and a complete admin panel.
+A full-stack web application for exploring Popular ROBOTS - by category, with detailed specifications, YouTube demonstrations, and interactive 3D model viewing. Includes role-based access control and a complete admin panel.
 
 **🌐 Live Demo:** [robotcollection.infinityfreeapp.com](https://robotcollection.infinityfreeapp.com)
 
