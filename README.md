@@ -36,7 +36,7 @@ A full-stack web application for exploring Popular ROBOTS - by category, with de
 ## 📖 Overview
 
 ### Problem
-Information about popular robots is scattered across manufacturer sites, videos, and papers. Students and enthusiasts have no single, organised place to browse robots, compare their background, and see them in action.
+Information about popular robots is scattered across manufacturer sites, videos, and papers. There exists a lack of organised place to browse most popular and complex robots, and see them in action.
 
 ### Solution
 Robot Collection brings this into one structured catalog. Robots are grouped by category (Industrial, Humanoid, Mobile, Drone, Medical, Space, Educational), and each robot has its own page with a description, specifications, a demo video, and an interactive 3D model where available.
